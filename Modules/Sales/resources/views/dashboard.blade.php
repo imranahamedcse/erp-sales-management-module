@@ -48,57 +48,5 @@
                 </div>
             </div>
         </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div class="card bg-base-100 shadow">
-                <div class="card-body">
-                    <h2 class="card-title">Recent Sales</h2>
-                    <div class="overflow-x-auto">
-                        <table class="table table-zebra">
-                            <thead>
-                                <tr>
-                                    <th>Invoice</th>
-                                    <th>Customer</th>
-                                    <th>Amount</th>
-                                    <th>Date</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>INV-2023-001</td>
-                                    <td>John Doe</td>
-                                    <td>$1,250.00</td>
-                                    <td>2023-07-20</td>
-                                </tr>
-                                <tr>
-                                    <td>INV-2023-002</td>
-                                    <td>Acme Corp</td>
-                                    <td>$3,450.00</td>
-                                    <td>2023-07-19</td>
-                                </tr>
-                                <tr>
-                                    <td>INV-2023-003</td>
-                                    <td>Jane Smith</td>
-                                    <td>$850.00</td>
-                                    <td>2023-07-18</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="card-actions justify-end">
-                        <button class="btn btn-primary btn-sm">View All</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card bg-base-100 shadow">
-                <div class="card-body">
-                    <h2 class="card-title">Sales Chart</h2>
-                    <div class="h-64 bg-gray-100 rounded flex items-center justify-center">
-                        <p class="text-gray-500">Sales chart will be displayed here</p>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 @endsection

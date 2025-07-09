@@ -10,7 +10,11 @@ class Note extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['content'];
+    protected $fillable = [
+        'content',
+        'notable_id',
+        'notable_type'
+    ];
 
     public function notable()
     {

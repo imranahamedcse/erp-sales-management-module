@@ -15,8 +15,14 @@ return new class extends Migration
             $table->id();
             $table->foreignId('customer_id')->constrained();
             $table->date('sale_date');
-            $table->decimal('total_amount', 12, 2);
-            $table->text('remarks')->nullable();
+            $table->string('invoice_number')->unique();
+            $table->decimal('total_amount', 10, 2);
+            $table->decimal('discount_amount', 10, 2)->default(0);
+            $table->decimal('paid_amount', 10, 2)->default(0);
+            $table->decimal('due_amount', 10, 2)->default(0);
+            $table->enum('payment_status', ['paid', 'partial', 'unpaid'])->default('unpaid');
+            $table->enum('status', ['completed', 'pending', 'cancelled'])->default('completed');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

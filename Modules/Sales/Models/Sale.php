@@ -7,11 +7,21 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 // use Modules\Sales\Database\Factories\SalesFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Sales extends Model
+class Sale extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['customer_id', 'sale_date', 'total_amount', 'remarks'];
+    protected $fillable = [
+        'customer_id',
+        'sale_date',
+        'invoice_number',
+        'total_amount',
+        'discount_amount',
+        'paid_amount',
+        'due_amount',
+        'payment_status',
+        'status'
+    ];
 
     public function customer()
     {

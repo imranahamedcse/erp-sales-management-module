@@ -11,15 +11,18 @@ class Product extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name', 'code', 'price', 'description'];
+    protected $fillable = [
+        'name',
+        'description',
+        'price',
+        'cost_price',
+        'stock_quantity',
+        'category_id',
+        'sku'
+    ];
 
     public function saleItems()
     {
         return $this->hasMany(SaleItem::class);
-    }
-
-    public function notes()
-    {
-        return $this->morphMany(Note::class, 'notable');
     }
 }
