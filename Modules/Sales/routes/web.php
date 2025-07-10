@@ -5,6 +5,7 @@ use Modules\Sales\Http\Controllers\CustomerController;
 use Modules\Sales\Http\Controllers\ProductController;
 use Modules\Sales\Http\Controllers\SaleController;
 use Modules\Sales\Http\Controllers\SalesController;
+use Modules\Sales\Http\Controllers\TrashController;
 use Modules\Sales\Models\Customer;
 use Modules\Sales\Models\Note;
 use Modules\Sales\Models\Product;
@@ -20,11 +21,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/{sale}/edit', [SaleController::class, 'edit'])->name('sales.edit');
         Route::put('/{sale}', [SaleController::class, 'update'])->name('sales.update');
         Route::delete('/{sale}', [SaleController::class, 'destroy'])->name('sales.delete');
+    });
 
-        // Trash Routes
-        Route::get('/trash', [SaleController::class, 'trash'])->name('sales.trash');
-        Route::post('/trash/{id}/restore', [SaleController::class, 'restore'])->name('sales.restore');
-        Route::delete('/trash/{id}/force-delete', [SaleController::class, 'forceDelete'])->name('sales.force-delete');
+    Route::prefix('trash')->group(function () {
+        Route::get('/', [TrashController::class, 'index'])->name('trash.index');
+        Route::post('/restore/{type}/{id}', [TrashController::class, 'restore'])->name('trash.restore');
     });
 
     // Products Routes

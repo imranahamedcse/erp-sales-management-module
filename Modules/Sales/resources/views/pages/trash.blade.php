@@ -2,86 +2,69 @@
 
 @section('content')
     <!-- Trash Page -->
-    <div id="trash-page" class="page-content hidden">
+    <div class="page-content">
         <div class="card bg-base-100 shadow">
             <div class="card-body">
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
-                    <h2 class="card-title">Trash</h2>
-                    <div class="flex gap-2 mt-2 md:mt-0">
-                        <button class="btn btn-error btn-sm">
-                            <i class="fas fa-trash mr-1"></i> Empty Trash
-                        </button>
+
+                @if (session('success'))
+                    <div class="alert alert-success mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>{{ session('success') }}</span>
                     </div>
-                </div>
+                @endif
 
                 <div class="tabs">
-                    <a class="tab tab-active">Sales</a>
-                    <a class="tab">Products</a>
-                    <a class="tab">Customers</a>
+                    <a class="tab tab-active" data-tab="sales">Sales</a>
+                    <a class="tab" data-tab="products">Products</a>
+                    <a class="tab" data-tab="customers">Customers</a>
                 </div>
 
-                <div class="overflow-x-auto mt-4">
-                    <table class="table table-zebra">
-                        <thead>
-                            <tr>
-                                <th>Invoice No</th>
-                                <th>Customer</th>
-                                <th>Date</th>
-                                <th>Deleted On</th>
-                                <th>Total</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>INV-2023-005</td>
-                                <td>Test Customer</td>
-                                <td>2023-07-15</td>
-                                <td>2023-07-16</td>
-                                <td>$150.00</td>
-                                <td>
-                                    <div class="flex gap-1">
-                                        <button class="btn btn-xs btn-success">
-                                            <i class="fas fa-undo mr-1"></i> Restore
-                                        </button>
-                                        <button class="btn btn-xs btn-error">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>INV-2023-004</td>
-                                <td>Old Customer</td>
-                                <td>2023-07-10</td>
-                                <td>2023-07-12</td>
-                                <td>$75.00</td>
-                                <td>
-                                    <div class="flex gap-1">
-                                        <button class="btn btn-xs btn-success">
-                                            <i class="fas fa-undo mr-1"></i> Restore
-                                        </button>
-                                        <button class="btn btn-xs btn-error">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div id="sales-tab-content" class="tab-content active">
+                    @include('sales::partials.trash-sales', ['sales' => $sales])
                 </div>
 
-                <div class="flex justify-between items-center mt-4">
-                    <div>
-                        <span class="text-sm">Showing 1 to 2 of 2 entries</span>
-                    </div>
-                    <div class="join">
-                        <button class="join-item btn btn-sm btn-disabled">«</button>
-                        <button class="join-item btn btn-sm btn-active">1</button>
-                        <button class="join-item btn btn-sm btn-disabled">»</button>
-                    </div>
+                <!-- Products Tab Content (Hidden by default) -->
+                <div id="products-tab-content" class="tab-content hidden">
+                    <!-- Similar structure for products -->
+                    @include('sales::partials.trash-products', ['products' => $products])
+                </div>
+
+                <!-- Customers Tab Content (Hidden by default) -->
+                <div id="customers-tab-content" class="tab-content hidden">
+                    <!-- Similar structure for customers -->
+                    @include('sales::partials.trash-customers', ['customers' => $customers])
                 </div>
             </div>
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            $('.tabs .tab').on('click', function(e) {
+                e.preventDefault();
+                const tabName = $(this).data('tab');
+
+                $('.tabs .tab').removeClass('tab-active');
+                $(this).addClass('tab-active');
+
+                $('.tab-content').removeClass('active').addClass('hidden');
+                $(`#${tabName}-tab-content`).removeClass('hidden').addClass('active');
+
+                if (!$(this).hasClass('loaded') && tabName !== 'sales') {
+                    $.get('{{ route('trash.index') }}', {
+                        type: tabName
+                    }, function(data) {
+                        $(`#${tabName}-tab-content`).html(data);
+                        $(`[data-tab="${tabName}"]`).addClass('loaded');
+                    });
+                }
+            });
+        });
+    </script>
+@endpush

@@ -8,6 +8,7 @@ use Modules\Sales\Models\Customer;
 use Modules\Sales\Models\Product;
 use Modules\Sales\Models\Sale;
 use Illuminate\Support\Str;
+use Modules\Sales\Models\SaleItem;
 
 class SaleController extends Controller
 {
@@ -137,5 +138,11 @@ class SaleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id) {}
+    // সেলস ডিলিট (সফট ডিলিট)
+    public function destroy(Sale $sale)
+    {
+        $sale->delete();
+        return redirect()->route('sales.index')
+            ->with('success', 'Sale moved to trash successfully!');
+    }
 }

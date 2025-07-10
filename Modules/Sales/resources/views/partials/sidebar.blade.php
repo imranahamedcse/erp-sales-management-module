@@ -37,7 +37,7 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('sales.trash') }}" class="{{ request()->routeIs('sales.trash') ? 'active' : '' }}">
+                <a href="{{ route('trash.index') }}" class="{{ request()->routeIs('trash.index') ? 'active' : '' }}">
                     <i class="fas fa-trash mr-2"></i> <span>Trash</span>
                 </a>
             </li>
