@@ -37,6 +37,11 @@
                 </a>
             </li>
             <li>
+                <a href="{{ route('note.index') }}" class="{{ request()->routeIs('note.index') ? 'active' : '' }}">
+                    <i class="fas fa-book mr-2"></i> <span>Note</span>
+                </a>
+            </li>
+            <li>
                 <a href="{{ route('trash.index') }}" class="{{ request()->routeIs('trash.index') ? 'active' : '' }}">
                     <i class="fas fa-trash mr-2"></i> <span>Trash</span>
                 </a>
