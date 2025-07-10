@@ -30,12 +30,6 @@
                     </td>
                     <td>
                         <div class="flex gap-1">
-                            <a href="{{ route('sales.show', $sale->id) }}" class="btn btn-xs btn-info">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                            <a href="{{ route('sales.edit', $sale->id) }}" class="btn btn-xs btn-warning">
-                                <i class="fas fa-edit"></i>
-                            </a>
                             <form action="{{ route('sales.delete', $sale->id) }}" method="POST" class="inline">
                                 @csrf
                                 @method('DELETE')

@@ -7,9 +7,6 @@
             <div class="card-body">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
                     <h2 class="card-title">Customers</h2>
-                    <a href="{{ route('customers.create') }}" class="btn btn-primary mt-2 md:mt-0">
-                        <i class="fas fa-plus mr-1"></i> Add Customer
-                    </a>
                 </div>
 
                 @if(session('success'))
@@ -52,12 +49,6 @@
                                     <td>{{ $customer->address }}</td>
                                     <td>
                                         <div class="flex gap-1">
-                                            <a href="{{ route('customers.show', $customer->id) }}" class="btn btn-xs btn-info">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-                                            <a href="{{ route('customers.edit', $customer->id) }}" class="btn btn-xs btn-warning">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
                                             <form action="{{ route('customers.delete', $customer->id) }}" method="POST" class="inline">
                                                 @csrf
                                                 @method('DELETE')

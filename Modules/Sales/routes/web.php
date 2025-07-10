@@ -29,11 +29,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     // Products Routes
-    Route::resource('products', ProductController::class)->except(['destroy']);
+    Route::get('products', [ProductController::class, 'index'])->name('products.index');
     Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.delete');
 
     // Customers Routes
-    Route::resource('customers', CustomerController::class)->except(['destroy']);
+    Route::get('customers', [CustomerController::class, 'index'])->name('customers.index');
     Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->name('customers.delete');
 
     // Dashboard Route

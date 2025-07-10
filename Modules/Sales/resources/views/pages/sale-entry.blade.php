@@ -2,7 +2,7 @@
 
 @section('content')
     <!-- Sales Entry Page -->
-    <div id="sales-entry-page" class="page-content hidden">
+    <div class="page-content">
         <div class="flex flex-col lg:flex-row gap-6">
             <!-- Left Column -->
             <div class="flex-1">

@@ -55,7 +55,7 @@ class SaleController extends Controller
     {
         $customers = Customer::all();
         $products = Product::all();
-        return view('sales.create', compact('customers', 'products'));
+        return view('sales::pages.sale-entry', compact('customers', 'products'));
     }
 
     // সেলস স্টোর
@@ -138,7 +138,6 @@ class SaleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    // সেলস ডিলিট (সফট ডিলিট)
     public function destroy(Sale $sale)
     {
         $sale->delete();
