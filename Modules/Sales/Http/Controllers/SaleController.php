@@ -8,7 +8,6 @@ use Modules\Sales\Models\Customer;
 use Modules\Sales\Models\Product;
 use Modules\Sales\Models\Sale;
 use Illuminate\Support\Str;
-use Modules\Sales\Models\SaleItem;
 
 class SaleController extends Controller
 {
@@ -58,7 +57,6 @@ class SaleController extends Controller
         return view('sales::pages.sale-entry', compact('customers', 'products'));
     }
 
-    // সেলস স্টোর
     public function store(Request $request)
     {
         $request->validate([
@@ -69,10 +67,11 @@ class SaleController extends Controller
             'items.*.quantity' => 'required|integer|min:1',
             'items.*.price' => 'required|numeric|min:0',
             'items.*.discount' => 'nullable|numeric|min:0|max:100',
-            'notes' => 'nullable|string'
+            'notes' => 'nullable|string',
+            'status' => 'required|in:completed,draft'
         ]);
 
-        // টোটাল ক্যালকুলেশন
+        // Calculate totals
         $totalAmount = 0;
         $items = [];
 
@@ -92,26 +91,29 @@ class SaleController extends Controller
             $totalAmount += $total;
         }
 
-        // সেলস ক্রিয়েট
+        // Create sale
         $sale = Sale::create([
             'customer_id' => $request->customer_id,
             'sale_date' => $request->sale_date,
             'invoice_number' => 'INV-' . Str::random(8),
             'total_amount' => $totalAmount,
             'payment_status' => 'unpaid',
-            'status' => 'completed'
+            'status' => $request->status
         ]);
 
-        // সেলস আইটেমস সেভ
+        // Create sale items
         $sale->items()->createMany($items);
 
-        // নোটস সেভ
+        // Add notes if exists
         if ($request->notes) {
             $sale->notes()->create(['content' => $request->notes]);
         }
 
-        return redirect()->route('sales.show', $sale->id)
-            ->with('success', 'Sale created successfully!');
+        return response()->json([
+            'success' => true,
+            'message' => $request->status === 'draft' ? 'Sale saved as draft!' : 'Sale completed successfully!',
+            'redirect' => route('sales.create')
+        ]);
     }
 
     /**
