@@ -278,6 +278,21 @@
                 setTimeout(() => $('#form-errors').addClass('hidden'), 5000);
             }
 
+            function resetForm() {
+                // Reset form fields
+                $('#sales-form')[0].reset();
+
+                // Reset internal state
+                items = [];
+                $('#sales-items').empty();
+                updateOrderSummary();
+
+                // Reset date to today
+                const today = new Date().toISOString().split('T')[0];
+                $('#sale_date').val(today);
+                $('#display-sale-date').text(today);
+            }
+
             // Form submission
             $('#submit-sale').on('click', function() {
                 if (items.length === 0) {
@@ -310,9 +325,9 @@
                     success: function(response) {
                         if (response.success) {
                             toastr.success(response.message);
-                            
+
                             setTimeout(function() {
-                                window.location.href = response.redirect;
+                                resetForm();
                             }, 1500);
                         }
                     },
