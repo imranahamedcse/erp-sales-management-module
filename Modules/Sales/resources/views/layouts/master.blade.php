@@ -64,22 +64,6 @@
             const today = new Date();
             $('#sale-date').text(today.toISOString().split('T')[0]);
 
-            // Navigation
-            $('.sidebar a').on('click', function(e) {
-                e.preventDefault();
-                const target = $(this).attr('href').substring(1);
-
-                // Update active menu item
-                $('.sidebar a').removeClass('active');
-                $(this).addClass('active');
-
-                // Update page title
-                $('#page-title').text($(this).find('span').text());
-
-                // Show the correct page
-                $('.page-content').addClass('hidden');
-                $(`#${target}-page`).removeClass('hidden');
-            });
 
             // Sales Entry functionality
             $('#add-item-btn').on('click', function() {
@@ -203,6 +187,9 @@
             addRowEventListeners($('#sales-items tr').first());
         });
     </script>
+
+
+    @stack('scripts')
 </body>
 
 </html>

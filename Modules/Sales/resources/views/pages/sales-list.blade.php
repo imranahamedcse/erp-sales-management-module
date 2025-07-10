@@ -2,124 +2,100 @@
 
 @section('content')
     <!-- Sales List Page -->
-    <div id="sales-list-page" class="page-content hidden">
+    <div class="page-content">
         <div class="card bg-base-100 shadow">
             <div class="card-body">
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                     <h2 class="card-title">Sales List</h2>
-                    <div class="flex gap-2 mt-2 md:mt-0">
+                    <div class="flex flex-col md:flex-row gap-2 w-full md:w-auto">
                         <div class="form-control">
-                            <input type="text" placeholder="Search..." class="input input-bordered" />
+                            <select id="customer-filter" class="select select-bordered select-sm">
+                                <option value="">All Customers</option>
+                                @foreach ($customers as $customer)
+                                    <option value="{{ $customer->id }}">{{ $customer->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
-                        <div class="dropdown">
-                            <label tabindex="0" class="btn btn-outline">
-                                <i class="fas fa-filter mr-1"></i> Filter
-                            </label>
-                            <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-                                <li><a>Today</a></li>
-                                <li><a>This Week</a></li>
-                                <li><a>This Month</a></li>
-                                <li><a>Custom Range</a></li>
-                            </ul>
+                        <div class="form-control">
+                            <select id="product-filter" class="select select-bordered select-sm">
+                                <option value="">All Products</option>
+                                @foreach ($products as $product)
+                                    <option value="{{ $product->id }}">{{ $product->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
-                        <button class="btn btn-primary">
-                            <i class="fas fa-file-export mr-1"></i> Export
+                        <div class="form-control">
+                            <div class="flex items-center gap-1">
+                                <input type="date" id="start-date" class="input input-bordered input-sm">
+                                <span class="text-sm">to</span>
+                                <input type="date" id="end-date" class="input input-bordered input-sm">
+                            </div>
+                        </div>
+                        <button id="reset-filters" class="btn btn-outline btn-sm">
+                            <i class="fas fa-undo mr-1"></i> Reset
                         </button>
                     </div>
                 </div>
 
-                <div class="overflow-x-auto">
-                    <table class="table table-zebra">
-                        <thead>
-                            <tr>
-                                <th>Invoice No</th>
-                                <th>Customer</th>
-                                <th>Date</th>
-                                <th>Items</th>
-                                <th>Total</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>INV-2023-001</td>
-                                <td>John Doe</td>
-                                <td>2023-07-20</td>
-                                <td>3</td>
-                                <td>$1,250.00</td>
-                                <td><span class="badge badge-success">Completed</span></td>
-                                <td>
-                                    <div class="flex gap-1">
-                                        <button class="btn btn-xs btn-info">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="btn btn-xs btn-warning">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn btn-xs btn-error">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>INV-2023-002</td>
-                                <td>Acme Corp</td>
-                                <td>2023-07-19</td>
-                                <td>5</td>
-                                <td>$3,450.00</td>
-                                <td><span class="badge badge-success">Completed</span></td>
-                                <td>
-                                    <div class="flex gap-1">
-                                        <button class="btn btn-xs btn-info">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="btn btn-xs btn-warning">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn btn-xs btn-error">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>INV-2023-003</td>
-                                <td>Jane Smith</td>
-                                <td>2023-07-18</td>
-                                <td>2</td>
-                                <td>$850.00</td>
-                                <td><span class="badge badge-warning">Draft</span></td>
-                                <td>
-                                    <div class="flex gap-1">
-                                        <button class="btn btn-xs btn-info">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="btn btn-xs btn-warning">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn btn-xs btn-error">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="flex justify-between items-center mt-4">
-                    <div>
-                        <span class="text-sm">Showing 1 to 3 of 3 entries</span>
-                    </div>
-                    <div class="join">
-                        <button class="join-item btn btn-sm btn-disabled">«</button>
-                        <button class="join-item btn btn-sm btn-active">1</button>
-                        <button class="join-item btn btn-sm btn-disabled">»</button>
-                    </div>
+                <div id="sales-table-container">
+                    @include('sales::partials.sales-table', ['sales' => $sales])
                 </div>
             </div>
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            // Load sales data via AJAX
+            function loadSales(page = 1) {
+                const params = {
+                    customer: $('#customer-filter').val(),
+                    product: $('#product-filter').val(),
+                    start_date: $('#start-date').val(),
+                    end_date: $('#end-date').val(),
+                    page: page
+                };
+
+                $.ajax({
+                    url: '{{ route('sales.index') }}',
+                    data: params,
+                    success: function(data) {
+                        $('#sales-table-container').html(data);
+                        updatePaginationLinks();
+                    },
+                    error: function(xhr) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+
+            // Update pagination links to use AJAX
+            function updatePaginationLinks() {
+                $('.pagination a').on('click', function(e) {
+                    e.preventDefault();
+                    const page = $(this).attr('href').split('page=')[1];
+                    loadSales(page);
+                });
+            }
+
+            // Initial setup of pagination links
+            updatePaginationLinks();
+
+            // Auto-filter on any filter change
+            $('#customer-filter, #product-filter, #start-date, #end-date').on('change', function() {
+                loadSales();
+            });
+
+            // Reset filters
+            $('#reset-filters').click(function() {
+                $('#customer-filter').val('');
+                $('#product-filter').val('');
+                $('#start-date').val('');
+                $('#end-date').val('');
+                loadSales();
+            });
+        });
+    </script>
+@endpush
